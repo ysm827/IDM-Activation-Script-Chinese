@@ -1,4 +1,4 @@
-@set iasver=1.3.7
+@set iasver=1.3.9
 @setlocal DisableDelayedExpansion
 @echo off
 
@@ -336,11 +336,12 @@ title  IDM 激活脚本 %iasver%
 echo:
 echo 正在初始化...
 
-::  Check WMI
+::  Check WMI（优先 CIM，失败再回退旧版 WMI；新版 Windows 上 Get-WmiObject 的 DCOM 路径可能卡死）
 
-%psc% "Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property CreationClassName" %nul2% | find /i "computersystem" %nul1% || (
+echo   - 检测系统信息 (WMI/CIM)...
+%psc% "$c=$null;try{$c=Get-CimInstance Win32_ComputerSystem -EA Stop}catch{};if(-not $c){try{$c=Get-WmiObject Win32_ComputerSystem -EA Stop}catch{}};$c.CreationClassName" %nul2% | find /i "computersystem" %nul1% || (
 %eline%
-%psc% "Get-WmiObject -Class Win32_ComputerSystem | Select-Object -Property CreationClassName"
+%psc% "$c=$null;try{$c=Get-CimInstance Win32_ComputerSystem -EA Stop}catch{};if(-not $c){try{$c=Get-WmiObject Win32_ComputerSystem -EA Stop}catch{}};$c.CreationClassName"
 echo:
 echo WMI 无法正常工作，进程被阻止...
 echo:
@@ -351,8 +352,9 @@ goto done2
 
 ::  Check user account SID
 
+echo   - 获取用户账户 SID...
 set _sid=
-for /f "delims=" %%a in ('%psc% "([System.Security.Principal.NTAccount](Get-WmiObject -Class Win32_ComputerSystem).UserName).Translate([System.Security.Principal.SecurityIdentifier]).Value" %nul6%') do (set _sid=%%a)
+for /f "delims=" %%a in ('%psc% "$c=$null;try{$c=Get-CimInstance Win32_ComputerSystem -EA Stop}catch{$c=Get-WmiObject Win32_ComputerSystem};([System.Security.Principal.NTAccount]$c.UserName).Translate([System.Security.Principal.SecurityIdentifier]).Value" %nul6%') do (set _sid=%%a)
 
 reg query HKU\%_sid%\Software %nul% || (
 for /f "delims=" %%a in ('%psc% "$explorerProc = Get-Process -Name explorer | Where-Object {$_.SessionId -eq (Get-Process -Id $pid).SessionId} | Select-Object -First 1; $sid = (gwmi -Query ('Select * From Win32_Process Where ProcessID=' + $explorerProc.Id)).GetOwnerSid().Sid; $sid" %nul6%') do (set _sid=%%a)
@@ -412,6 +414,7 @@ set "idmcheck=tasklist /fi "imagename eq idman.exe" | findstr /i "idman.exe" %nu
 
 ::  Check CLSID registry access
 
+echo   - 校验注册表访问权限...
 %nul% reg add %CLSID2%\IAS_TEST
 %nul% reg query %CLSID2%\IAS_TEST || (
 %eline%

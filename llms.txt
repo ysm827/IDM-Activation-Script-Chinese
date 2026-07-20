@@ -17,7 +17,8 @@ This is a Chinese-language fork that wraps the well-known IDM-Activation-Script 
 
 ## Key docs
 
-- [README.md](README.md): Main Chinese README — features, system requirements, the single entry script (`开始激活.cmd`) plus the `IAS.cmd` engine, FAQ, technical details, registry-backup behavior.
+- [README.md](README.md): Main Chinese README — features, system requirements, the single entry script (`开始激活.cmd`) plus the `IAS.cmd` engine, 14-entry FAQ, technical details, registry-backup behavior.
+- [README.en.md](README.en.md): English README — project overview table, quick start, mode-selection matrix, requirements, limitations, and troubleshooting for international readers and AI search engines.
 - [docs/README.md](docs/README.md): Documentation map for maintainers, AI search engines, and new contributors.
 - [OPEN_SOURCE_POLICY.md](OPEN_SOURCE_POLICY.md): Public repository policy, GPL-3.0 open-source rule, and CI visibility guard.
 - [CHANGELOG.md](CHANGELOG.md): Version history (v1.2 → current).
@@ -48,7 +49,8 @@ This is a Chinese-language fork that wraps the well-known IDM-Activation-Script 
 
 - **乱码 / Garbled console output**: scripts are GBK-encoded and force `chcp 936`. If a terminal still shows garbled text, you're viewing the file with a UTF-8-only viewer (GitHub web UI is one) — download the ZIP and run locally.
 - **SmartScreen / Defender blocked**: the ZIPs are signed only by their SHA256 hashes (published alongside the ZIP). Compare `Get-FileHash` against the `.sha256` file before unzipping. The scripts are batch + a tiny PowerShell helper; everything is plain text and auditable.
-- **"激活后仍提示注册"**: usually means the IDM was upgraded to a newer version after activation. Re-run `开始激活.cmd` and pick `[1]` freeze mode again.
+- **"激活后仍提示注册" / IDM still shows unregistered after activation**: `[2]` writes a random serial that IDM's online check may reject. Run `[3]` reset, then `[1]` freeze — freeze writes no serial at all and is the most stable path on IDM 6.42+.
+- **Some web pages stop loading after activation**: caused by IDM's browser integration module, not by the script — it never modifies hosts, firewall, or proxy settings. Disable the IDM browser extension or add the domain to IDM's "do not capture" list.
 - **Headless / silent run**: `IAS.cmd /act /silent /log="C:\Temp\ias.log"` (activate + silent + log path); swap `/act` for `/frz` to freeze.
 - **English version**: this repo is the Chinese edition. The upstream English tool is at [lstprjct/IDM-Activation-Script](https://github.com/lstprjct/IDM-Activation-Script).
 

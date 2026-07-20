@@ -6,9 +6,9 @@
 [![Platform](https://img.shields.io/badge/platform-Windows%207%20%7C%208%20%7C%2010%20%7C%2011-blue.svg)](#系统要求)
 [![Release](https://img.shields.io/github/v/release/tytsxai/IDM-Activation-Script-Chinese)](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases)
 
-[简体中文 (current)](README.md) · [llms.txt for AI search](llms.txt) · [Docs](docs/README.md) · [Open Source Policy](OPEN_SOURCE_POLICY.md) · [Changelog](CHANGELOG.md) · [Issues](https://github.com/tytsxai/IDM-Activation-Script-Chinese/issues)
+[简体中文 (current)](README.md) · [English README](README.en.md) · [llms.txt for AI search](llms.txt) · [Docs](docs/README.md) · [Open Source Policy](OPEN_SOURCE_POLICY.md) · [Changelog](CHANGELOG.md) · [Issues](https://github.com/tytsxai/IDM-Activation-Script-Chinese/issues)
 
-> **For English speakers**: This repo is the Chinese edition of [lstprjct/IDM-Activation-Script](https://github.com/lstprjct/IDM-Activation-Script). All scripts are GBK-encoded with Simplified Chinese menus, designed for Chinese Windows users who otherwise hit GBK/CP936 console garbling. Three modes: **freeze trial** (recommended), **random-registration activation**, **trial reset**. Pure batch + tiny PowerShell helper, no IDM binary patching, automatic registry backup.
+> **For English speakers**: see the [English README](README.en.md). This repo is the Simplified Chinese edition of [lstprjct/IDM-Activation-Script](https://github.com/lstprjct/IDM-Activation-Script). All scripts are GBK-encoded with Chinese menus, designed for Chinese Windows users who otherwise hit GBK/CP936 console garbling. Three modes: **activation** (menu `[2]`, recommended — works immediately, no account or trial needed), **freeze trial** (menu `[1]`, fallback), **trial reset** (menu `[3]`). Pure batch + a tiny PowerShell helper, no IDM binary patching, automatic registry backup.
 
 > **一键激活 Internet Download Manager（IDM）的中文脚本工具**：支持 IDM 冻结试用期、随机注册信息激活、试用期一键重置三种模式，全程中文菜单与提示，无需安装任何依赖，单个 `.cmd` 文件即可在 Windows 7 / 8 / 10 / 11 上稳定运行。
 

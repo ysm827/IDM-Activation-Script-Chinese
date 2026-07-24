@@ -33,10 +33,17 @@ release/IDM-Activation-Script-v1.4.0.zip
 
 ### `release/` 只保留一份
 
-仓库内不再冗余存放历史版本压缩包。**历史版本没有丢**，可以从两个地方拿到：
+仓库内不再冗余存放历史版本压缩包。**历史版本没有丢**，但入口按版本不同，如实说明：
 
-- [GitHub Releases](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases)：每个 tag 页面的 Assets 区都挂着当时发布的包，长期有效；
-- Git 历史：`git log --all -- release/` 能找到被移除的文件，`git checkout <commit> -- <路径>` 可取回。
+- **v1.3.3 / v1.3.5 / v1.3.6 / v1.3.7 / v1.3.9 / v1.4.0** —— 对应 tag 的 [Release](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases) 页面 `Assets` 区可直接下载，长期有效；
+- **v1.3.4 / v1.3.8** —— 当年就是纯文档版本，没有独立发布包（分别沿用 v1.3.3 / v1.3.7 的包）；
+- **v1.3 / v1.3.1** —— 这两个版本**从未发过 GitHub Release**，包只存在于 `release/` 目录里，移除后仅能从 Git 历史取回：
+
+  ```bash
+  git show 669c2a8^:release/IDM-Activation-Script-v1.3.1.zip > IDM-Activation-Script-v1.3.1.zip
+  ```
+
+  （`669c2a8` 是移除这些文件的提交；`git log --all --diff-filter=D --name-only -- release/` 可列出全部被移除的文件。）这两个版本分别是 2025-12 和 2026-04 的产物，已落后多个大版本，保留取回路径只为不丢历史，不建议使用。
 
 新增 `release/README.md` 把这个约定写在目录里，避免以后有人又往里堆版本号文件。
 

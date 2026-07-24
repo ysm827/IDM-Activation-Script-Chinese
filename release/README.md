@@ -19,10 +19,28 @@
 
 ## 历史版本去哪儿了
 
-历史版本的压缩包不再冗余存放在仓库里，可以从两个地方获取：
+历史版本的压缩包不再冗余存放在仓库里。**各版本实际能从哪里拿到，按版本区分**：
 
-1. **[GitHub Releases](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases)** —— 每个 tag 页面的 `Assets` 区都挂着当时发布的包，长期有效，这是推荐入口；
-2. **Git 历史** —— `git log --all --diff-filter=D -- release/` 可以列出被移除的文件，`git checkout <commit>^ -- <路径>` 取回。
+| 版本 | 下载入口 |
+| --- | --- |
+| v1.3.3 / v1.3.5 / v1.3.6 / v1.3.7 / v1.3.9 / v1.4.0 | 对应 tag 的 [Release](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases) 页面 `Assets` 区，长期有效 |
+| v1.3.4 | 纯文档版本，当时就没有独立发布包，沿用 v1.3.3 的包 |
+| v1.3.8 | 纯文档版本，Release 里挂的是 v1.3.7 的包 |
+| **v1.3 / v1.3.1** | **从未发过 GitHub Release**，当初只存在于本目录；现在只能从 Git 历史取回（见下） |
+
+从 Git 历史取回（以 v1.3.1 为例，`669c2a8` 是移除这些文件的提交）：
+
+```bash
+git show 669c2a8^:release/IDM-Activation-Script-v1.3.1.zip > IDM-Activation-Script-v1.3.1.zip
+```
+
+列出所有被移除的文件：
+
+```bash
+git log --all --diff-filter=D --name-only -- release/
+```
+
+> 说明：v1.3 与 v1.3.1 分别是 2025-12 和 2026-04 的版本，已落后当前版本多个大版本，**不建议使用**，保留取回路径只是为了不丢历史。
 
 ## 发版时怎么更新
 

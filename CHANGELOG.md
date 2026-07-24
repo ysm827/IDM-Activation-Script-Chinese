@@ -12,7 +12,7 @@
 
 ### 改动
 - **发布包改用固定文件名 `IDM-Activation-Script.zip`**（不再带版本号）。以前每发一版就多一个 `IDM-Activation-Script-v<版本>.zip`，README、`llms.txt`、`README.en.md` 里的下载链接每次都要跟着改，漏改就会指向旧包。改成固定名后，下载链接一次写死、永远指向最新版；版本号仍由 Git tag、GitHub Release 标题和 `IAS.cmd` 的 `iasver` 标识。
-- **`release/` 目录只保留一份最新发布包**。历史版本的压缩包不再冗余存放在仓库里，改由 [GitHub Releases](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases) 长期提供（每个 tag 页面的 Assets 区都能下载到当时的包），仓库内的历史副本可在 Git 历史中找回。新增 `release/README.md` 说明这一约定。
+- **`release/` 目录只保留一份最新发布包**。v1.3.3 及以后各版本的包都能从对应 tag 的 [Release](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases) 页面 `Assets` 区下载；**v1.3 与 v1.3.1 当年没发过 GitHub Release**，只存在于 `release/` 目录，移除后需从 Git 历史取回（`git show 669c2a8^:release/IDM-Activation-Script-v1.3.1.zip > 文件名`）。逐版本的取回入口见新增的 `release/README.md`。
 - `IAS.cmd` 版本号 `1.4.0` → `1.4.1`，保持脚本自报版本与 tag、发布包一致。
 
 ### 文档

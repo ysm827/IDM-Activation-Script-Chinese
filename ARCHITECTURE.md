@@ -43,7 +43,7 @@
   - `reports/smoke-win-baseline.md`：当前版本 Windows 冒烟基线模板。
   - 维护约束：`docs/` 作为公开维护资料随仓库保留；发版时应同步 README / CHANGELOG / llms.txt 中的用户可见信息，避免公开文档互相矛盾。
 - `release/`
-  - 发布产物：`IDM-Activation-Script.zip` 与同名 `.sha256` 校验文件（v1.4.1 起固定文件名、不带版本号；目录内只保留最新一份，历史版本由 GitHub Releases 的 Assets 提供）。约定见 `release/README.md`。
+  - 发布产物：`IDM-Activation-Script.zip` 与同名 `.sha256` 校验文件（v1.4.1 起固定文件名、不带版本号；目录内只保留最新一份。历史版本入口按版本不同——v1.3.3 及以后在对应 tag 的 Release Assets 里，v1.3 / v1.3.1 从未发过 Release、只能从 Git 历史取回）。约定见 `release/README.md`。
 
 ## 关键约束（高风险点）
 

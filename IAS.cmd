@@ -1,4 +1,4 @@
-@set iasver=1.3.9
+@set iasver=1.4.0
 @setlocal DisableDelayedExpansion
 @echo off
 
@@ -15,13 +15,15 @@ chcp 936 >nul 2>&1
 ::   许可证  : GPL-3.0（详见仓库根目录 LICENSE）
 ::
 ::   ----- 代码导航（便于后续维护） -----
-::   01-040 行  : 头部元信息、代码页设置、默认开关
-::   040-110 行 : PATH 设置、Sysnative / SysArm32 架构重入、参数解析（/act /frz /res /silent /log）
-::   110-150 行 : 静默模式校验、Null 服务检测、日志初始化
-::   150-400 行 : 环境探测（管理员权限、IDM 安装路径、CLSID 注册表项、网络连通性）
-::   400-600 行 : 主菜单（冻结 / 激活 / 重置 / 下载 / 帮助），交互分派
-::   600-870 行 : 激活与冻结核心流程、注册表备份、随机注册信息注入
-::   870-1017 行: 重置流程、错误处理、日志收尾、退出码
+::   01-045 行  : 头部元信息、代码页设置、默认开关
+::   045-115 行 : PATH 设置、Sysnative / SysArm32 架构重入、参数解析（/act /frz /res /noupd /reupd /silent /log）
+::   115-155 行 : 静默模式校验、Null 服务检测、日志初始化
+::   155-405 行 : 环境探测（管理员权限、IDM 安装路径、CLSID 注册表项、网络连通性）
+::   405-490 行 : 主菜单（冻结 / 激活 / 重置 / 更新开关 / 下载 / 帮助），交互分派
+::   490-600 行 : 重置流程与注册表删除队列
+::   600-700 行 : 禁用 / 恢复 IDM 自动更新检查（CheckUpdtVM）
+::   700-950 行 : 激活与冻结核心流程、注册表备份、随机注册信息注入
+::   950-1100 行: CLSID 扫描（PowerShell 内嵌段）、错误处理、日志收尾、退出码
 ::
 ::============================================================================
 
@@ -35,6 +37,12 @@ set _freeze=0
 
 ::  To reset the activation and trial, run the script with "/res" parameter or change 0 to 1 in below line
 set _reset=0
+
+::  To disable IDM's automatic update check (stops the "new version" popup), run the script with "/noupd" parameter or change 0 to 1 in below line
+set _noupd=0
+
+::  To restore IDM's automatic update check, run the script with "/reupd" parameter or change 0 to 1 in below line
+set _reupd=0
 
 ::  If value is changed in above lines or parameter is used then script will run in unattended mode
 
@@ -92,13 +100,17 @@ if /i "%%A"=="-el"  set _elev=1
 if /i "%%A"=="/res" set _reset=1
 if /i "%%A"=="/frz" set _freeze=1
 if /i "%%A"=="/act" set _activate=1
+if /i "%%A"=="/noupd" set _noupd=1
+if /i "%%A"=="/reupd" set _reupd=1
 if /i "%%A"=="/silent" set _silent=1
 if /i "%%A"=="/quiet" set _silent=1
 if /i "%%A"=="/log" set _log=1
 )
 )
 
-for %%A in (%_activate% %_freeze% %_reset%) do (if "%%A"=="1" set _unattended=1)
+if %_noupd%==1 if %_reupd%==1 set _reupd=0
+
+for %%A in (%_activate% %_freeze% %_reset% %_noupd% %_reupd%) do (if "%%A"=="1" set _unattended=1)
 if %_silent%==1 set _unattended=1
 if %_silent%==1 set _log=1
 
@@ -119,7 +131,7 @@ call :log "日志输出: %log_file%"
 if %_silent%==0 echo 日志文件: %log_file%
 )
 
-if %_silent%==1 if %_activate%==0 if %_freeze%==0 if %_reset%==0 (
+if %_silent%==1 if %_activate%==0 if %_freeze%==0 if %_reset%==0 if %_noupd%==0 if %_reupd%==0 (
 call :set_exit 2 "静默模式缺少操作参数，退出"
 goto done2
 )
@@ -430,6 +442,8 @@ goto done2
 ::========================================================================================================================================
 
 if %_reset%==1 goto :_reset
+if %_noupd%==1 goto :_noupdate
+if %_reupd%==1 goto :_restoreupd
 if %_activate%==1 (set frz=0&goto :_activate)
 if %_freeze%==1 (set frz=1&goto :_activate)
 
@@ -438,11 +452,8 @@ if %_freeze%==1 (set frz=1&goto :_activate)
 cls
 chcp 936 >nul 2>&1
 title  IDM 激活脚本 %iasver%
-if not defined terminal mode 75, 28
+if not defined terminal mode 75, 31
 
-echo:
-echo:
-echo:
 echo:
 echo:
 echo:                此脚本可支持最新版本的 IDM。
@@ -453,18 +464,24 @@ echo:               [2] 激活
 echo:               [3] 重置激活/试用期
 echo:               _____________________________________________
 echo:
-echo:               [4] 下载 IDM
-echo:               [5] 帮助
+echo:               [4] 禁用 IDM 更新提示
+echo:               [5] 恢复 IDM 更新提示
+echo:               _____________________________________________
+echo:
+echo:               [6] 下载 IDM
+echo:               [7] 帮助
 echo:               [0] 退出
 echo:            ___________________________________________________
 echo:
-call :_color2 %_White% "             " %_Green% "在键盘上输入你的选项 [1,2,3,4,5,0]"
-choice /C:123450 /N
+call :_color2 %_White% "        " %_Green% "在键盘上输入你的选项 [1,2,3,4,5,6,7,0]"
+choice /C:12345670 /N
 set _erl=%errorlevel%
 
-if %_erl%==6 exit /b
-if %_erl%==5 start %mas% & goto MainMenu
-if %_erl%==4 start https://www.internetdownloadmanager.com/download.html & goto MainMenu
+if %_erl%==8 exit /b
+if %_erl%==7 start %mas% & goto MainMenu
+if %_erl%==6 start https://www.internetdownloadmanager.com/download.html & goto MainMenu
+if %_erl%==5 goto :_restoreupd
+if %_erl%==4 goto :_noupdate
 if %_erl%==3 goto _reset
 if %_erl%==2 (set frz=0&goto :_activate)
 if %_erl%==1 (set frz=1&goto :_activate)
@@ -562,6 +579,94 @@ call :log "已删除 - !reg!"
 set "reg=%reg:"=%"
 call :_color2 %Red% "失败 - !reg!"
 call :set_exit 1 "删除失败 - !reg!"
+)
+
+exit /b
+
+::========================================================================================================================================
+
+::  禁用 / 恢复 IDM 的自动更新检查（对应 issue #20）
+::
+::  原理：HKCU\Software\DownloadManager 下的 CheckUpdtVM 为 0 时，IDM 不再
+::  自动检查新版本，也就不会反复弹出"发现新版本 / 请更新"的提示窗口。
+::  该值只影响更新检查行为，不写序列号、不动 CLSID，随时可用菜单 [5] 改回。
+::  顺带的好处：IDM 自动升级到新版后激活常常失效，关掉更新检查可以稳住当前状态。
+
+:_noupdate
+
+set "_updval=0"
+set "_updact=禁用"
+goto :_updapply
+
+:_restoreupd
+
+set "_updval=1"
+set "_updact=恢复"
+
+:_updapply
+
+call :log "开始%_updact% IDM 自动更新检查，CheckUpdtVM=%_updval%"
+cls
+chcp 936 >nul 2>&1
+if not defined terminal mode 100, 30
+
+echo:
+if not exist "%IDMan%" (
+call :_color %Red% "IDM [Internet Download Manager] 未安装。"
+echo 你可以从此网址下载: https://www.internetdownloadmanager.com/download.html
+call :set_exit 1 "未检测到 IDM 安装"
+goto done
+)
+
+echo 正在%_updact% IDM 的自动更新检查...
+echo:
+
+set "_updold="
+for /f "tokens=3" %%a in ('reg query "HKCU\Software\DownloadManager" /v CheckUpdtVM %nul6%') do set "_updold=%%a"
+if defined _updold (
+echo 变更前 CheckUpdtVM = !_updold!
+call :log "变更前 CheckUpdtVM = !_updold!"
+) else (
+echo 变更前未设置 CheckUpdtVM，IDM 默认会自动检查更新
+call :log "变更前 CheckUpdtVM 不存在"
+)
+
+%idmcheck% && (echo: & echo 正在关闭 IDM 以便设置生效... & taskkill /f /im idman.exe)
+
+echo:
+set "reg="HKCU\Software\DownloadManager" /v "CheckUpdtVM" /t REG_DWORD /d "%_updval%"" & call :_updset
+if not %HKCUsync%==1 (
+set "reg="HKU\%_sid%\Software\DownloadManager" /v "CheckUpdtVM" /t REG_DWORD /d "%_updval%"" & call :_updset
+)
+
+echo:
+echo %line%
+echo:
+if "%_updval%"=="0" (
+call :_color %Green% "已禁用 IDM 的自动更新检查，更新弹窗不会再出现。"
+echo:
+call :_color %Gray% "如需恢复，请在主菜单选择 [5] 恢复 IDM 更新提示。"
+call :_color %Gray% "提醒：停留在当前版本可避免更新后激活失效，但也不再获得官方修复。"
+) else (
+call :_color %Green% "已恢复 IDM 的自动更新检查。"
+echo:
+call :_color %Gray% "提醒：IDM 更新到新版本后激活可能失效，届时重新运行本脚本即可。"
+)
+
+goto done
+
+:_updset
+
+reg add %reg% /f %nul%
+
+if "%errorlevel%"=="0" (
+set "reg=%reg:"=%"
+echo 已写入 - !reg!
+call :log "已写入 - !reg!"
+) else (
+set "reg=%reg:"=%"
+call :_color2 %Red% "失败 - !reg!"
+call :set_exit 1 "写入失败 - !reg!"
 )
 
 exit /b
@@ -668,6 +773,8 @@ call :_color %Green% "IDM 的 30 天试用期已成功设置冻结。"
 echo:
 call :_color %Gray% "如果 IDM 提示注册弹窗，请重新安装 IDM。"
 )
+echo:
+call :_color %Gray% "IDM 自动更新到新版本可能让激活失效；若它频繁弹更新提示，可在主菜单选 [4] 禁用更新。"
 
 ::========================================================================================================================================
 

@@ -6,7 +6,7 @@
 
 - `.github/workflows/ci.yml`
   - GitHub Actions 工作流入口（Windows runner）。
-  - 两步：1) 调用 `tools/validate.ps1` 做仓库卫生校验（编码、换行、基础 `cmd.exe` 可用性探测）；2) 用 `IAS.cmd /silent` 做最短路径冒烟，断言退出码为 `2`（"静默模式缺少动作参数"路径）。
+  - 三步：1) 调用 `tools/validate.ps1` 做仓库卫生校验（编码、换行、基础 `cmd.exe` 可用性探测）；2) 用 `IAS.cmd /silent` 做最短路径冒烟，断言退出码为 `2`（"静默模式缺少动作参数"路径）；3) 用 `IAS.cmd /noupd /silent` 做深一层冒烟（runner 上没有 IDM），断言退出码为 `1`（走完提权/PowerShell/WMI/SID/CLSID 探测后命中"未检测到 IDM 安装"）。
 - `.github/ISSUE_TEMPLATE/`
   - `bug_report.yml`：结构化 Bug 反馈模板，强制带 Windows / IDM / 脚本版本与 `开始激活.cmd` 的环境检测输出。
   - `help.yml`：使用帮助 / 新手求助模板。
@@ -15,13 +15,13 @@
   - CI 校验脚本：强制 `.cmd` 为 GBK（936）且无 BOM（控制台输出需要）；`.txt` 不强制编码（记事本打开，`使用说明.txt` 用 UTF-8 BOM）；按 `.gitattributes` 检查行尾（CRLF/LF）；末尾跑一次轻量 `cmd.exe` 探测。
   - 目标是尽早在 CI 中阻止“编码/换行被编辑器自动改坏”的提交进入主分支。
 - `IAS.cmd`
-  - 主批处理脚本（约 1000 行），包含参数解析、环境探测、激活/冻结/重置流程、注册表备份与日志输出。
+  - 主批处理脚本（约 1100 行），包含参数解析、环境探测、激活/冻结/重置流程、IDM 更新检查开关（`CheckUpdtVM`）、注册表备份与日志输出。
   - 头部含「代码导航」注释块，按行号区间标注主要代码段位置。
   - 维护注意：该文件依赖 CRLF 行尾与 GBK 编码；部分环境/编辑器的自动转换会导致异常。脚本启动时会自检 LF/CRLF。
 - `开始激活.cmd`（v1.3.6 起的唯一入口，合并了原四个脚本）
   - 自动用 PowerShell 提权（单引号包裹路径，兼容含 `(x86)` 等特殊字符的目录）。
   - 内置环境自检：管理员权限、PowerShell 语言模式、Null 服务、网络连通性、代码页、WMI/CIM、IDM 安装路径、目录写权限。
-  - 自检通过或用户确认后，`call IAS.cmd` 进入菜单（冻结 / 激活 / 重置 / 下载 / 帮助）；也接受 `/frz` `/act` `/res` `/silent /log=...` 等参数透传。
+  - 自检通过或用户确认后，`call IAS.cmd` 进入菜单（冻结 / 激活 / 重置 / 禁用更新 / 恢复更新 / 下载 / 帮助）；也接受 `/frz` `/act` `/res` `/noupd` `/reupd` `/silent /log=...` 等参数透传。
 - `使用说明.txt`
   - 极简上手指南（UTF-8 BOM + CRLF），面向纯小白用户。
 - `README.md` / `CHANGELOG.md` / `CONTRIBUTING.md` / `SECURITY.md` / `ARCHITECTURE.md`
@@ -32,7 +32,8 @@
   - ARCHITECTURE：本文件，维护者视角的仓库结构与高风险点。
 - `docs/`
   - `README.md`：公开文档索引，面向新用户、维护者和 AI 搜索引擎说明文档入口与真实性边界。
-  - `release-notes-v1.3.7.md` / `release-notes-v1.3.6.md` / `release-notes-v1.3.5.md`：近期运行时/文档发布说明。
+  - `release-notes-v1.4.0.md`：v1.4.0 新增"禁用 / 恢复 IDM 更新提示"的发布说明（issue #20）。
+  - `release-notes-v1.3.8.md` / `release-notes-v1.3.7.md` / `release-notes-v1.3.6.md` / `release-notes-v1.3.5.md`：近期运行时/文档发布说明。
   - `release-notes-v1.3.4.md`：v1.3.4 文档专项发布说明。
   - `release-notes-v1.3.3.md`：v1.3.3 运行时发布说明与回归建议。
   - `release-notes-v1.3.1.md`：v1.3.1 历史发布说明（保留）。
@@ -55,11 +56,13 @@
 2. checkout 代码后顺序执行：
    - `tools/validate.ps1`：校验编码（GBK/无 BOM）、行尾（按 `.gitattributes`）、`cmd.exe` 基础可用性。失败时以 `::error file=...::原因` 注解到对应行，便于在 PR diff 中直接看到。
    - `IAS.cmd /silent` 冒烟：在 `chcp 936` 之后调用脚本主体，断言退出码为 `2`（无动作参数 → 静默退出）。这是脚本最短启动路径，能在不依赖管理员/网络/IDM 的前提下捕获语法或参数解析回归。
+   - `IAS.cmd /noupd /silent` 冒烟：走完架构重入、PowerShell/WMI 探测、SID 与 CLSID 校验后进入更新开关分支，runner 上没有安装 IDM，因此断言退出码为 `1`。相比上一条能覆盖脚本的绝大部分启动路径。
 3. 任一步失败即阻止合并（建议在 GitHub 仓库设置中将 `Windows validation` 设为分支保护必过项）。
 
 ## 退出码语义（速查）
 
 - `IAS.cmd` 退出码：
-  - `0`：当前路径正常完成（菜单退出、激活/冻结/重置成功完成）。
+  - `0`：当前路径正常完成（菜单退出、激活/冻结/重置/更新开关成功完成）。
+  - `1`：流程本身跑到了业务分支但未成功（未检测到 IDM 安装、注册表删除/写入失败、IDM 下载测试失败、网络不可达等）。
   - `2`：环境/参数错误（静默模式缺动作参数、未支持的系统版本、缺 PowerShell、缺管理员权限、WMI 失败、CLSID 写入失败、临时目录运行被阻止等）。
 - `开始激活.cmd` 退出码：自检发现问题时由用户决定是否继续；选择退出返回 `1`，否则进入菜单后原样透传 `IAS.cmd` 的返回码。

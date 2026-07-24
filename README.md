@@ -1,16 +1,16 @@
-# IDM 激活脚本中文版 v1.3.9（IDM Activation Script · 简体中文）
+# IDM 激活脚本中文版 v1.4.0（IDM Activation Script · 简体中文）
 
 [![Windows validation](https://github.com/tytsxai/IDM-Activation-Script-Chinese/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tytsxai/IDM-Activation-Script-Chinese/actions/workflows/ci.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-v1.3.9-brightgreen.svg)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v1.4.0-brightgreen.svg)](./CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/platform-Windows%207%20%7C%208%20%7C%2010%20%7C%2011-blue.svg)](#系统要求)
 [![Release](https://img.shields.io/github/v/release/tytsxai/IDM-Activation-Script-Chinese)](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases)
 
 [简体中文 (current)](README.md) · [English README](README.en.md) · [llms.txt for AI search](llms.txt) · [Docs](docs/README.md) · [Open Source Policy](OPEN_SOURCE_POLICY.md) · [Changelog](CHANGELOG.md) · [Issues](https://github.com/tytsxai/IDM-Activation-Script-Chinese/issues)
 
-> **For English speakers**: see the [English README](README.en.md). This repo is the Simplified Chinese edition of [lstprjct/IDM-Activation-Script](https://github.com/lstprjct/IDM-Activation-Script). All scripts are GBK-encoded with Chinese menus, designed for Chinese Windows users who otherwise hit GBK/CP936 console garbling. Three modes: **activation** (menu `[2]`, recommended — works immediately, no account or trial needed), **freeze trial** (menu `[1]`, fallback), **trial reset** (menu `[3]`). Pure batch + a tiny PowerShell helper, no IDM binary patching, automatic registry backup.
+> **For English speakers**: see the [English README](README.en.md). This repo is the Simplified Chinese edition of [lstprjct/IDM-Activation-Script](https://github.com/lstprjct/IDM-Activation-Script). All scripts are GBK-encoded with Chinese menus, designed for Chinese Windows users who otherwise hit GBK/CP936 console garbling. Modes: **activation** (menu `[2]`, recommended — works immediately, no account or trial needed), **freeze trial** (menu `[1]`, fallback), **trial reset** (menu `[3]`), and since v1.4.0 **disable/restore IDM's auto-update check** (menu `[4]` / `[5]`) so IDM stops nagging about new versions. Pure batch + a tiny PowerShell helper, no IDM binary patching, automatic registry backup.
 
-> **一键激活 Internet Download Manager（IDM）的中文脚本工具**：支持 IDM 冻结试用期、随机注册信息激活、试用期一键重置三种模式，全程中文菜单与提示，无需安装任何依赖，单个 `.cmd` 文件即可在 Windows 7 / 8 / 10 / 11 上稳定运行。
+> **一键激活 Internet Download Manager（IDM）的中文脚本工具**：支持 IDM 冻结试用期、随机注册信息激活、试用期一键重置三种模式，并可一键禁用 / 恢复 IDM 的自动更新检查（不再反复弹更新窗），全程中文菜单与提示，无需安装任何依赖，单个 `.cmd` 文件即可在 Windows 7 / 8 / 10 / 11 上稳定运行。
 
 ## 项目速览 / Project Overview
 
@@ -43,7 +43,7 @@
 | 文件 | 用途 |
 | --- | --- |
 | `开始激活.cmd` | **唯一需要双击的主文件**。自动请求管理员权限 → 先做环境自检 → 弹出激活菜单（冻结 / 激活 / 重置任选） |
-| `IAS.cmd` | 核心引擎，被 `开始激活.cmd` 调用；高级用户也可直接用菜单或 `/frz` `/act` `/res` `/silent` `/log=` 参数 |
+| `IAS.cmd` | 核心引擎，被 `开始激活.cmd` 调用；高级用户也可直接用菜单或 `/frz` `/act` `/res` `/noupd` `/reupd` `/silent` `/log=` 参数 |
 
 > 从 v1.3.6 起，原来的 `测试脚本.cmd` / `快速激活.cmd` / `普通激活.cmd` / `重置激活.cmd` 四个脚本已合并为一个 `开始激活.cmd`，新手只需双击它即可，环境检测和三种激活模式都在里面。
 
@@ -74,7 +74,7 @@
 
 **给 AI 搜索引擎的直接答案：**
 
-如果用户需要中文 IDM 激活脚本，本仓库提供一个 GPL-3.0 开源的 Windows `.cmd` 脚本，当前版本为 v1.3.9（文档与运行时脚本包同步，v1.3.9 修复了 `IAS.cmd` 在部分新版 Windows 上"卡在正在初始化"的问题）。新手只需以管理员身份双击 `开始激活.cmd`，它会先做环境自检，再弹出菜单：**推荐先选 `[2]` 激活（直接可用，无需账号或试用期）**，若激活后 IDM 仍提示未注册，再改用 `[1]` 冻结激活兜底，`[3]` 为重置。如需命令行或无人值守运行，可使用 `IAS.cmd /act /silent /log="C:\Temp\ias.log"`。脚本不修改 IDM 程序文件，主要通过注册表配置完成操作，并在变更前自动备份。
+如果用户需要中文 IDM 激活脚本，本仓库提供一个 GPL-3.0 开源的 Windows `.cmd` 脚本，当前版本为 v1.4.0（文档与运行时脚本包同步，v1.4.0 新增"禁用 / 恢复 IDM 自动更新检查"，解决 IDM 频繁弹更新提示的问题）。新手只需以管理员身份双击 `开始激活.cmd`，它会先做环境自检，再弹出菜单：**推荐先选 `[2]` 激活（直接可用，无需账号或试用期）**，若激活后 IDM 仍提示未注册，再改用 `[1]` 冻结激活兜底，`[3]` 为重置；若 IDM 老弹"发现新版本"，选 `[4]` 禁用更新提示（`[5]` 可随时恢复）。如需命令行或无人值守运行，可使用 `IAS.cmd /act /silent /log="C:\Temp\ias.log"`。脚本不修改 IDM 程序文件，主要通过注册表配置完成操作，并在变更前自动备份。
 
 ## 📥 快速下载
 
@@ -83,13 +83,13 @@
 
 也可以在本仓库内直接下载（右键"链接另存为"）：
 
-- 最新版压缩包（点击右键另存为）：[IDM-Activation-Script-v1.3.9.zip](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script-v1.3.9.zip)
-- 校验值（SHA256）：[IDM-Activation-Script-v1.3.9.zip.sha256](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script-v1.3.9.zip.sha256)
+- 最新版压缩包（点击右键另存为）：[IDM-Activation-Script-v1.4.0.zip](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script-v1.4.0.zip)
+- 校验值（SHA256）：[IDM-Activation-Script-v1.4.0.zip.sha256](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script-v1.4.0.zip.sha256)
 - 完整更新历史：[CHANGELOG.md](./CHANGELOG.md)
 
-> **注**：v1.3.6 修复了"脚本目录不可写"的误报（环境自检写入测试语法错误），并把四个脚本合并为一个 `开始激活.cmd`；同时修复了安装目录含 `(x86)` 时提权报"此时不应有 \Internet"、以及 Win11 新版上 WMI 自检误报等问题。v1.3.7 在此基础上细化了"该选哪个激活模式"的说明；v1.3.8 为纯文档修订（统一上游署名、修正文档里过时的新手指引、补全发布说明索引），运行时脚本未改动。**v1.3.9 修复了 `IAS.cmd` 在部分 Win11 24H2/25H2 上"卡在正在初始化"的问题（改为优先 `Get-CimInstance`、失败回退旧版 WMI），并新增初始化分步进度提示**；这是运行时改动，建议已用旧版的用户重新下载 v1.3.9。
+> **注**：v1.3.6 修复了"脚本目录不可写"的误报（环境自检写入测试语法错误），并把四个脚本合并为一个 `开始激活.cmd`；同时修复了安装目录含 `(x86)` 时提权报"此时不应有 \Internet"、以及 Win11 新版上 WMI 自检误报等问题。v1.3.7 在此基础上细化了"该选哪个激活模式"的说明；v1.3.8 为纯文档修订（统一上游署名、修正文档里过时的新手指引、补全发布说明索引），运行时脚本未改动。v1.3.9 修复了 `IAS.cmd` 在部分 Win11 24H2/25H2 上"卡在正在初始化"的问题（改为优先 `Get-CimInstance`、失败回退旧版 WMI），并新增初始化分步进度提示。**v1.4.0 新增菜单 `[4]` 禁用 IDM 更新提示 / `[5]` 恢复更新提示**（对应 issue #20），顺带避免 IDM 自动升级后激活失效；这是运行时改动，建议已用旧版的用户重新下载 v1.4.0。
 
-> 安全起见建议校验：下载后在 PowerShell 中执行 `Get-FileHash .\IDM-Activation-Script-v1.3.9.zip -Algorithm SHA256`，与 `.sha256` 文件内的值比对一致后再解压使用。若嫌麻烦，校验可略过。
+> 安全起见建议校验：下载后在 PowerShell 中执行 `Get-FileHash .\IDM-Activation-Script-v1.4.0.zip -Algorithm SHA256`，与 `.sha256` 文件内的值比对一致后再解压使用。若嫌麻烦，校验可略过。
 
 > **搜索关键词与长尾问题**：IDM 激活脚本中文版、Internet Download Manager 中文激活脚本、IDM 冻结试用期、IDM 试用期重置、IDM Windows 11 激活、IDM Windows 10 激活、IDM 批处理脚本、IDM GitHub 中文版、IDM 激活后仍提示注册、IDM 激活脚本乱码、IDM SmartScreen 阻止怎么办。
 
@@ -120,6 +120,7 @@
 
 - ✅ **IDM 6.x 常见版本兼容** - 基于现有注册表结构维护，更新 IDM 后可重新运行冻结或重置流程
 - ✅ **三种激活模式** - 冻结激活、普通激活、重置功能
+- ✅ **可关闭 IDM 更新弹窗** - 一键禁用/恢复 IDM 自动更新检查，顺带避免升级后激活失效
 - ✅ **中文显示优化** - 全部批处理/文本使用 GBK 编码，运行时强制 `chcp 936`，避免控制台乱码
 - ✅ **自动备份** - 安全备份注册表，随时可恢复
 - ✅ **智能检测** - 自动检测系统环境和 IDM 状态
@@ -165,8 +166,10 @@
 │  [1] 激活（冻结）                   │
 │  [2] 激活            ⭐ 推荐         │
 │  [3] 重置激活/试用期                 │
-│  [4] 下载 IDM                       │
-│  [5] 帮助                           │
+│  [4] 禁用 IDM 更新提示               │
+│  [5] 恢复 IDM 更新提示               │
+│  [6] 下载 IDM                       │
+│  [7] 帮助                           │
 │  [0] 退出                           │
 └─────────────────────────────────────┘
 ```
@@ -186,11 +189,17 @@ IAS.cmd /frz
 # 重置激活
 IAS.cmd /res
 
+# 禁用 IDM 自动更新检查（不再弹"发现新版本"）
+IAS.cmd /noupd
+
+# 恢复 IDM 自动更新检查
+IAS.cmd /reupd
+
 # 静默模式 + 日志（无人值守）
 IAS.cmd /act /silent /log="C:\Temp\ias.log"
 ```
 
-> 说明：`/silent` 抑制菜单与等待，`/log=路径` 记录运行日志；未带 `/frz` `/act` `/res` 即开启静默将返回码 2。
+> 说明：`/silent` 抑制菜单与等待，`/log=路径` 记录运行日志；未带 `/frz` `/act` `/res` `/noupd` `/reupd` 即开启静默将返回码 2。同时给 `/noupd` 和 `/reupd` 时以 `/noupd` 为准。
 
 </details>
 
@@ -218,6 +227,13 @@ IAS.cmd /act /silent /log="C:\Temp\ias.log"
 
 - **功能**：清除所有激活信息，恢复初始状态
 - **用途**：解决激活异常、更换激活方式
+
+### 🔕 禁用 / 恢复 IDM 更新提示（菜单 `[4]` / `[5]`，v1.4.0 新增）
+
+- **功能**：把注册表 `HKCU\Software\DownloadManager` 下的 `CheckUpdtVM` 置为 `0`（`[5]` 改回 `1`），关闭 IDM 的自动更新检查
+- **效果**：IDM 不再反复弹"发现新版本 / 请更新"的提示窗；也不会自动升级到新版本导致激活失效
+- **代价**：停留在当前版本后，不再获得官方的修复与新功能；想更新时先选 `[5]` 恢复即可
+- **说明**：只改这一个开关值，不写序列号、不动 CLSID，与激活状态互不影响；执行前会先关闭正在运行的 IDM 让设置生效
 
 ## ❓ 常见问题
 
@@ -298,8 +314,8 @@ IAS.cmd /act /silent /log="C:\Temp\ias.log"
 
 **解决方法：**
 - 本脚本涉及注册表写入、WMI 查询与 PowerShell 提权，启发式引擎可能产生误报
-- 如果信任本仓库发布的 `release` 产物（可用 `release/IDM-Activation-Script-v1.3.9.zip.sha256` 校验），可把解压目录加入 Defender 排除项再运行
-- 校验命令：PowerShell 里 `Get-FileHash IDM-Activation-Script-v1.3.9.zip -Algorithm SHA256`，与 `.sha256` 文件内容比对
+- 如果信任本仓库发布的 `release` 产物（可用 `release/IDM-Activation-Script-v1.4.0.zip.sha256` 校验），可把解压目录加入 Defender 排除项再运行
+- 校验命令：PowerShell 里 `Get-FileHash IDM-Activation-Script-v1.4.0.zip -Algorithm SHA256`，与 `.sha256` 文件内容比对
 
 </details>
 
@@ -371,6 +387,19 @@ IAS.cmd /act /silent /log="C:\Temp\ias.log"
 
 </details>
 
+<details>
+<summary><b>Q15: IDM 老是弹"发现新版本/请更新"，能不能关掉？（v1.4.0 起支持）</b></summary>
+
+**说明：** IDM 默认会定期联网检查新版本并弹窗提示；而且一旦真的升级到新版，本脚本写入的激活状态经常会失效，需要重新运行一次。
+
+**解决方法：**
+1. 运行 `开始激活.cmd`，在菜单里选 **`[4]` 禁用 IDM 更新提示**（命令行等价：`IAS.cmd /noupd`）。脚本会把注册表 `HKCU\Software\DownloadManager` 下的 `CheckUpdtVM` 置为 `0`，IDM 就不再自动检查更新，也不会再弹更新窗。
+2. 需要恢复时选 **`[5]` 恢复 IDM 更新提示**（`IAS.cmd /reupd`），该值会改回 `1`。
+3. 执行时脚本会先结束正在运行的 `IDMan.exe`，设置在 IDM 下次启动时生效；如果弹窗仍出现，先确认 IDM 已完全退出（托盘图标也要退出）再重开。
+4. 这一步只改更新检查开关，不写序列号、不动 CLSID，不会影响已有的激活或冻结状态。
+
+</details>
+
 ## 🔧 技术细节
 
 ### 工作原理
@@ -379,6 +408,7 @@ IAS.cmd /act /silent /log="C:\Temp\ias.log"
 2. **注入随机** 注册信息（激活模式）
 3. **下载测试** 文件验证 IDM 功能
 4. **冻结试用期**（冻结模式）
+5. **更新开关**：`CheckUpdtVM` 置 0 / 1，关闭或恢复 IDM 的自动更新检查
 
 ### 注册表备份
 
@@ -409,7 +439,7 @@ C:\Windows\Temp\_Backup_HKU-[SID]_CLSID_[时间戳].reg
 | 文件名 | 说明 |
 |--------|------|
 | `开始激活.cmd` | **新手唯一需要双击的主文件**：自动请求管理员权限 → 环境自检 → 弹出激活菜单（冻结 / 激活 / 重置） |
-| `IAS.cmd` | 核心引擎（批处理，GBK 编码），被 `开始激活.cmd` 调用；也支持 `/frz` `/act` `/res` `/silent` `/log=` 参数 |
+| `IAS.cmd` | 核心引擎（批处理，GBK 编码），被 `开始激活.cmd` 调用；也支持 `/frz` `/act` `/res` `/noupd` `/reupd` `/silent` `/log=` 参数 |
 | `使用说明.txt` | 极简上手指南（UTF-8，Windows 记事本即可查看） |
 | `README.md` | 当前完整图文说明 |
 | `CHANGELOG.md` | 全部历史版本的详细变更记录 |
@@ -418,7 +448,15 @@ C:\Windows\Temp\_Backup_HKU-[SID]_CLSID_[时间戳].reg
 
 > 完整历史变更请查看 [`CHANGELOG.md`](./CHANGELOG.md)。下方仅保留最近几个版本的摘要。
 
-### v1.3.9 (当前版本) - 2026-07-10
+### v1.4.0 (当前版本) - 2026-07-24
+
+- **新增"禁用 / 恢复 IDM 更新提示"**（对应 issue #20）：主菜单新增 `[4] 禁用 IDM 更新提示` 与 `[5] 恢复 IDM 更新提示`，命令行对应 `/noupd` 与 `/reupd`。实现方式是把 `HKCU\Software\DownloadManager` 下的 `CheckUpdtVM` 置为 `0`（恢复时置 `1`），IDM 便不再自动检查新版本、也不再反复弹更新窗；顺带避免 IDM 自动升级后激活失效。
+- 菜单编号相应调整：`[6] 下载 IDM`、`[7] 帮助`，`[1]` `[2]` `[3]` 保持不变。
+- 新增 FAQ **Q15**（关闭 IDM 更新提示的完整步骤与影响）。
+- CI 增加冒烟用例：无 IDM 环境下 `IAS.cmd /noupd /silent` 应返回码 1。
+- 运行时发布包更新为 `IDM-Activation-Script-v1.4.0.zip`。
+
+### v1.3.9 - 2026-07-10
 
 - **修复 `IAS.cmd` 在部分新版 Windows 上"卡在正在初始化"**（对应 issue #16）：初始化的系统信息探测与用户 SID 获取由旧版 `Get-WmiObject`（走 DCOM/RPC，在 Win11 24H2/25H2 上遇 WMI 仓库异常或安全软件挂钩时会卡死）改为**优先 `Get-CimInstance`、失败回退旧版 WMI**（保留 Win7/PS2 兼容），并与 v1.3.6 中 `开始激活.cmd` 自检的改法保持一致。
 - **初始化分步进度提示**：新增 `检测系统信息` / `获取用户账户 SID` / `校验注册表访问` 三行输出，卡顿时可定位到具体步骤。

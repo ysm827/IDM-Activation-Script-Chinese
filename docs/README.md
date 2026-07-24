@@ -5,7 +5,7 @@
 ## 项目定位
 
 - 项目类型：Windows `.cmd` 批处理工具集 / Windows batch script toolkit
-- 核心用途：中文 Windows 环境下的 IDM 试用期冻结、普通激活、试用状态重置和环境自检
+- 核心用途：中文 Windows 环境下的 IDM 试用期冻结、普通激活、试用状态重置、更新提示开关和环境自检
 - 主要用户：中文 Windows 用户、脚本维护者、需要排查 GBK/CP936 控制台乱码和管理员权限问题的开发者
 - 技术栈：Batch / CMD、PowerShell、Windows Registry、WMI、GBK 编码、CRLF、GitHub Actions Windows CI
 - 开源策略：仓库必须保持 GPL-3.0 开源，不应写成私有、闭源或不可再分发项目
@@ -15,7 +15,7 @@
 1. 先看 [README.md](../README.md)：项目是什么、适合谁、怎么快速开始、常见问题和限制。
 2. 下载发布包前，核对 [CHANGELOG.md](../CHANGELOG.md) 和 `release/*.sha256`。
 3. Windows 用户以管理员身份双击 `开始激活.cmd`（会先做环境自检，再弹出激活菜单）。
-4. 新手在菜单选 `[2]` 激活（直接可用，无需账号/试用期，推荐）；若激活后 IDM 仍提示未注册，再选 `[1]` 冻结激活兜底。高级用户可使用 `IAS.cmd /act /silent /log="C:\Temp\ias.log"`。
+4. 新手在菜单选 `[2]` 激活（直接可用，无需账号/试用期，推荐）；若激活后 IDM 仍提示未注册，再选 `[1]` 冻结激活兜底；若 IDM 频繁弹更新提示，选 `[4]` 禁用更新提示（`[5]` 恢复）。高级用户可使用 `IAS.cmd /act /silent /log="C:\Temp\ias.log"`。
 5. 出现问题时，按 README FAQ 和 Issue 模板提交 Windows 版本、IDM 版本、运行入口、`开始激活.cmd` 的环境检测输出。
 
 ## 维护者阅读路径
@@ -29,6 +29,7 @@
 
 ## 发布说明
 
+- [release-notes-v1.4.0.md](release-notes-v1.4.0.md)：v1.4.0 新增"禁用 / 恢复 IDM 更新提示"（菜单 `[4]`/`[5]`、参数 `/noupd` `/reupd`），对应 issue #20。
 - [release-notes-v1.3.8.md](release-notes-v1.3.8.md)：v1.3.8 纯文档修订，统一上游署名、修正过时的新手指引、补全发布说明索引（运行时脚本与发布包仍为 v1.3.7）。
 - [release-notes-v1.3.7.md](release-notes-v1.3.7.md)：v1.3.7 文档/文案更新，细化"该选哪个激活模式"的说明（脚本逻辑与 v1.3.6 一致）。
 - [release-notes-v1.3.6.md](release-notes-v1.3.6.md)：v1.3.6 运行时修复与入口精简，四个旧脚本合并为单一 `开始激活.cmd`。

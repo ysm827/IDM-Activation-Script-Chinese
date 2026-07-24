@@ -44,3 +44,15 @@ jobs:
           )
           echo Smoke probe OK: IAS.cmd /silent exited with 2 as expected.
           exit /b 0
+
+      - name: Smoke probe — IAS.cmd /noupd /silent without IDM installed (expect exit 1)
+        shell: cmd
+        run: |
+          chcp 936 >nul
+          call IAS.cmd /noupd /silent
+          if %errorlevel% NEQ 1 (
+            echo ::error::IAS.cmd /noupd /silent should exit with 1 when IDM is not installed, got %errorlevel%
+            exit /b 1
+          )
+          echo Smoke probe OK: IAS.cmd /noupd /silent exited with 1 as expected.
+          exit /b 0

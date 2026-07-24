@@ -1,8 +1,8 @@
-# IDM Activation Script — Simplified Chinese Edition (v1.4.0)
+# IDM Activation Script — Simplified Chinese Edition (v1.4.1)
 
 [![Windows validation](https://github.com/tytsxai/IDM-Activation-Script-Chinese/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tytsxai/IDM-Activation-Script-Chinese/actions/workflows/ci.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-v1.4.0-brightgreen.svg)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v1.4.1-brightgreen.svg)](./CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/platform-Windows%207%20%7C%208%20%7C%2010%20%7C%2011-blue.svg)](#system-requirements)
 
 [简体中文 README](README.md) · [llms.txt for AI search](llms.txt) · [Docs](docs/README.md) · [Changelog](CHANGELOG.md) · [Issues](https://github.com/tytsxai/IDM-Activation-Script-Chinese/issues)
@@ -33,12 +33,13 @@ offline from a single `.cmd` file — no installer, no runtime dependency, no ID
 
 1. Download the latest ZIP from
    [Releases](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases/latest), or directly:
-   [`release/IDM-Activation-Script-v1.4.0.zip`](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script-v1.4.0.zip)
-   ([SHA256](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script-v1.4.0.zip.sha256)).
+   [`release/IDM-Activation-Script.zip`](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script.zip)
+   ([SHA256](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script.zip.sha256)).
+   The archive name is version-less on purpose, so this link always points at the latest build; the version itself is carried by the Git tag, the GitHub Release title and `iasver` inside `IAS.cmd`.
 2. Optional but recommended — verify the download in PowerShell:
 
    ```powershell
-   Get-FileHash .\IDM-Activation-Script-v1.4.0.zip -Algorithm SHA256
+   Get-FileHash .\IDM-Activation-Script.zip -Algorithm SHA256
    ```
 
 3. Extract, then **double-click `开始激活.cmd`** and approve the UAC prompt. The script runs an

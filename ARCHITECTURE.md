@@ -32,6 +32,7 @@
   - ARCHITECTURE：本文件，维护者视角的仓库结构与高风险点。
 - `docs/`
   - `README.md`：公开文档索引，面向新用户、维护者和 AI 搜索引擎说明文档入口与真实性边界。
+  - `release-notes-v1.4.1.md`：v1.4.1 发布包改名与 `release/` 目录精简的发布说明。
   - `release-notes-v1.4.0.md`：v1.4.0 新增"禁用 / 恢复 IDM 更新提示"的发布说明（issue #20）。
   - `release-notes-v1.3.8.md` / `release-notes-v1.3.7.md` / `release-notes-v1.3.6.md` / `release-notes-v1.3.5.md`：近期运行时/文档发布说明。
   - `release-notes-v1.3.4.md`：v1.3.4 文档专项发布说明。
@@ -42,7 +43,7 @@
   - `reports/smoke-win-baseline.md`：当前版本 Windows 冒烟基线模板。
   - 维护约束：`docs/` 作为公开维护资料随仓库保留；发版时应同步 README / CHANGELOG / llms.txt 中的用户可见信息，避免公开文档互相矛盾。
 - `release/`
-  - 发布产物：`IDM-Activation-Script-v<版本>.zip` 与同名 `.sha256` 校验文件。
+  - 发布产物：`IDM-Activation-Script.zip` 与同名 `.sha256` 校验文件（v1.4.1 起固定文件名、不带版本号；目录内只保留最新一份，历史版本由 GitHub Releases 的 Assets 提供）。约定见 `release/README.md`。
 
 ## 关键约束（高风险点）
 

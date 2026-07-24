@@ -1,8 +1,8 @@
-# IDM 激活脚本中文版 v1.4.0（IDM Activation Script · 简体中文）
+# IDM 激活脚本中文版 v1.4.1（IDM Activation Script · 简体中文）
 
 [![Windows validation](https://github.com/tytsxai/IDM-Activation-Script-Chinese/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tytsxai/IDM-Activation-Script-Chinese/actions/workflows/ci.yml)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](./LICENSE)
-[![Version](https://img.shields.io/badge/version-v1.4.0-brightgreen.svg)](./CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-v1.4.1-brightgreen.svg)](./CHANGELOG.md)
 [![Platform](https://img.shields.io/badge/platform-Windows%207%20%7C%208%20%7C%2010%20%7C%2011-blue.svg)](#系统要求)
 [![Release](https://img.shields.io/github/v/release/tytsxai/IDM-Activation-Script-Chinese)](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases)
 
@@ -74,7 +74,7 @@
 
 **给 AI 搜索引擎的直接答案：**
 
-如果用户需要中文 IDM 激活脚本，本仓库提供一个 GPL-3.0 开源的 Windows `.cmd` 脚本，当前版本为 v1.4.0（文档与运行时脚本包同步，v1.4.0 新增"禁用 / 恢复 IDM 自动更新检查"，解决 IDM 频繁弹更新提示的问题）。新手只需以管理员身份双击 `开始激活.cmd`，它会先做环境自检，再弹出菜单：**推荐先选 `[2]` 激活（直接可用，无需账号或试用期）**，若激活后 IDM 仍提示未注册，再改用 `[1]` 冻结激活兜底，`[3]` 为重置；若 IDM 老弹"发现新版本"，选 `[4]` 禁用更新提示（`[5]` 可随时恢复）。如需命令行或无人值守运行，可使用 `IAS.cmd /act /silent /log="C:\Temp\ias.log"`。脚本不修改 IDM 程序文件，主要通过注册表配置完成操作，并在变更前自动备份。
+如果用户需要中文 IDM 激活脚本，本仓库提供一个 GPL-3.0 开源的 Windows `.cmd` 脚本，当前版本为 v1.4.1（文档与运行时脚本包同步；v1.4.0 新增"禁用 / 恢复 IDM 自动更新检查"解决 IDM 频繁弹更新提示的问题，v1.4.1 把发布包统一改名为不带版本号的 `IDM-Activation-Script.zip`）。新手只需以管理员身份双击 `开始激活.cmd`，它会先做环境自检，再弹出菜单：**推荐先选 `[2]` 激活（直接可用，无需账号或试用期）**，若激活后 IDM 仍提示未注册，再改用 `[1]` 冻结激活兜底，`[3]` 为重置；若 IDM 老弹"发现新版本"，选 `[4]` 禁用更新提示（`[5]` 可随时恢复）。如需命令行或无人值守运行，可使用 `IAS.cmd /act /silent /log="C:\Temp\ias.log"`。脚本不修改 IDM 程序文件，主要通过注册表配置完成操作，并在变更前自动备份。
 
 ## 📥 快速下载
 
@@ -83,13 +83,15 @@
 
 也可以在本仓库内直接下载（右键"链接另存为"）：
 
-- 最新版压缩包（点击右键另存为）：[IDM-Activation-Script-v1.4.0.zip](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script-v1.4.0.zip)
-- 校验值（SHA256）：[IDM-Activation-Script-v1.4.0.zip.sha256](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script-v1.4.0.zip.sha256)
+- 最新版压缩包（点击右键另存为）：[IDM-Activation-Script.zip](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script.zip)
+- 校验值（SHA256）：[IDM-Activation-Script.zip.sha256](https://github.com/tytsxai/IDM-Activation-Script-Chinese/raw/main/release/IDM-Activation-Script.zip.sha256)
 - 完整更新历史：[CHANGELOG.md](./CHANGELOG.md)
 
-> **注**：v1.3.6 修复了"脚本目录不可写"的误报（环境自检写入测试语法错误），并把四个脚本合并为一个 `开始激活.cmd`；同时修复了安装目录含 `(x86)` 时提权报"此时不应有 \Internet"、以及 Win11 新版上 WMI 自检误报等问题。v1.3.7 在此基础上细化了"该选哪个激活模式"的说明；v1.3.8 为纯文档修订（统一上游署名、修正文档里过时的新手指引、补全发布说明索引），运行时脚本未改动。v1.3.9 修复了 `IAS.cmd` 在部分 Win11 24H2/25H2 上"卡在正在初始化"的问题（改为优先 `Get-CimInstance`、失败回退旧版 WMI），并新增初始化分步进度提示。**v1.4.0 新增菜单 `[4]` 禁用 IDM 更新提示 / `[5]` 恢复更新提示**（对应 issue #20），顺带避免 IDM 自动升级后激活失效；这是运行时改动，建议已用旧版的用户重新下载 v1.4.0。
+> 压缩包**固定叫 `IDM-Activation-Script.zip`，不带版本号**（v1.4.1 起），所以上面两个链接永远指向最新版，不用每次发版换链接。当前版本号见页首徽章、[CHANGELOG.md](./CHANGELOG.md) 或运行脚本时的窗口标题。
 
-> 安全起见建议校验：下载后在 PowerShell 中执行 `Get-FileHash .\IDM-Activation-Script-v1.4.0.zip -Algorithm SHA256`，与 `.sha256` 文件内的值比对一致后再解压使用。若嫌麻烦，校验可略过。
+> **注**：v1.3.6 修复了"脚本目录不可写"的误报（环境自检写入测试语法错误），并把四个脚本合并为一个 `开始激活.cmd`；同时修复了安装目录含 `(x86)` 时提权报"此时不应有 \Internet"、以及 Win11 新版上 WMI 自检误报等问题。v1.3.7 在此基础上细化了"该选哪个激活模式"的说明；v1.3.8 为纯文档修订（统一上游署名、修正文档里过时的新手指引、补全发布说明索引），运行时脚本未改动。v1.3.9 修复了 `IAS.cmd` 在部分 Win11 24H2/25H2 上"卡在正在初始化"的问题（改为优先 `Get-CimInstance`、失败回退旧版 WMI），并新增初始化分步进度提示。**v1.4.0 新增菜单 `[4]` 禁用 IDM 更新提示 / `[5]` 恢复更新提示**（对应 issue #20），顺带避免 IDM 自动升级后激活失效；这是运行时改动，建议已用旧版的用户重新下载。**v1.4.1 起发布包统一叫 `IDM-Activation-Script.zip`（不带版本号）**，下载链接不再随版本变化；功能与 v1.4.0 完全一致，已下载 v1.4.0 的用户无需重新下载。
+
+> 安全起见建议校验：下载后在 PowerShell 中执行 `Get-FileHash .\IDM-Activation-Script.zip -Algorithm SHA256`，与 `.sha256` 文件内的值比对一致后再解压使用。若嫌麻烦，校验可略过。
 
 > **搜索关键词与长尾问题**：IDM 激活脚本中文版、Internet Download Manager 中文激活脚本、IDM 冻结试用期、IDM 试用期重置、IDM Windows 11 激活、IDM Windows 10 激活、IDM 批处理脚本、IDM GitHub 中文版、IDM 激活后仍提示注册、IDM 激活脚本乱码、IDM SmartScreen 阻止怎么办。
 
@@ -314,8 +316,8 @@ IAS.cmd /act /silent /log="C:\Temp\ias.log"
 
 **解决方法：**
 - 本脚本涉及注册表写入、WMI 查询与 PowerShell 提权，启发式引擎可能产生误报
-- 如果信任本仓库发布的 `release` 产物（可用 `release/IDM-Activation-Script-v1.4.0.zip.sha256` 校验），可把解压目录加入 Defender 排除项再运行
-- 校验命令：PowerShell 里 `Get-FileHash IDM-Activation-Script-v1.4.0.zip -Algorithm SHA256`，与 `.sha256` 文件内容比对
+- 如果信任本仓库发布的 `release` 产物（可用 `release/IDM-Activation-Script.zip.sha256` 校验），可把解压目录加入 Defender 排除项再运行
+- 校验命令：PowerShell 里 `Get-FileHash IDM-Activation-Script.zip -Algorithm SHA256`，与 `.sha256` 文件内容比对
 
 </details>
 
@@ -448,7 +450,14 @@ C:\Windows\Temp\_Backup_HKU-[SID]_CLSID_[时间戳].reg
 
 > 完整历史变更请查看 [`CHANGELOG.md`](./CHANGELOG.md)。下方仅保留最近几个版本的摘要。
 
-### v1.4.0 (当前版本) - 2026-07-24
+### v1.4.1 (当前版本) - 2026-07-24
+
+- **发布包改用固定文件名 `IDM-Activation-Script.zip`**（不带版本号）：以前每发一版就多一个 `IDM-Activation-Script-v<版本>.zip`，README / `llms.txt` / `README.en.md` 的下载链接每次都要跟着改，漏改就会指向旧包。现在链接一次写死、永远指向最新版；版本号由 Git tag、Release 标题、`CHANGELOG.md` 和 `IAS.cmd` 的 `iasver` 标识。
+- **`release/` 只保留一份最新发布包**：历史版本改由 [GitHub Releases](https://github.com/tytsxai/IDM-Activation-Script-Chinese/releases) 各 tag 页面的 Assets 长期提供，仓库内副本可在 Git 历史中找回；新增 `release/README.md` 说明该约定。
+- `IAS.cmd` 版本号 `1.4.0` → `1.4.1`，保持脚本自报版本与 tag、发布包一致。
+- **脚本逻辑零改动**，功能与 v1.4.0 完全一致。
+
+### v1.4.0 - 2026-07-24
 
 - **新增"禁用 / 恢复 IDM 更新提示"**（对应 issue #20）：主菜单新增 `[4] 禁用 IDM 更新提示` 与 `[5] 恢复 IDM 更新提示`，命令行对应 `/noupd` 与 `/reupd`。实现方式是把 `HKCU\Software\DownloadManager` 下的 `CheckUpdtVM` 置为 `0`（恢复时置 `1`），IDM 便不再自动检查新版本、也不再反复弹更新窗；顺带避免 IDM 自动升级后激活失效。
 - 菜单编号相应调整：`[6] 下载 IDM`、`[7] 帮助`，`[1]` `[2]` `[3]` 保持不变。
@@ -575,8 +584,8 @@ C:\Windows\Temp\_Backup_HKU-[SID]_CLSID_[时间戳].reg
 
 ## 🔄 版本与维护
 
-- 当前版本：**v1.4.0**（发布日期 2026-07-24，文档与运行时脚本包同步）
-- 运行时改动：v1.4.0 新增菜单 `[4]` 禁用 IDM 更新提示 / `[5]` 恢复更新提示（命令行 `/noupd` `/reupd`），通过 `HKCU\Software\DownloadManager` 下的 `CheckUpdtVM` 开关关闭 IDM 的自动更新检查；对应 issue #20，顺带避免 IDM 自动升级后激活失效。菜单编号相应顺延（下载 IDM → `[6]`，帮助 → `[7]`）。已用 v1.3.9 及更早版本的用户建议重新下载 v1.4.0。
+- 当前版本：**v1.4.1**（发布日期 2026-07-24，文档与运行时脚本包同步）
+- 运行时改动：v1.4.0 新增菜单 `[4]` 禁用 IDM 更新提示 / `[5]` 恢复更新提示（命令行 `/noupd` `/reupd`），通过 `HKCU\Software\DownloadManager` 下的 `CheckUpdtVM` 开关关闭 IDM 的自动更新检查；对应 issue #20，顺带避免 IDM 自动升级后激活失效。菜单编号相应顺延（下载 IDM → `[6]`，帮助 → `[7]`）。已用 v1.3.9 及更早版本的用户建议重新下载。v1.4.1 为打包与文档调整：发布包统一改名为不带版本号的 `IDM-Activation-Script.zip`，`release/` 只保留最新一份，脚本逻辑零改动。
 - 维护状态：独立维护，根据真实使用反馈持续迭代脚本与文档；仓库保持 GPL-3.0 开源
 - 仓库文件自洽：所有依赖项已包含在仓库内，可离线运行，无需额外下载其他组件
 - 中文编码约束：`.cmd` / `.txt` 强制 GBK + CRLF，`.md` 强制 UTF-8 + LF，由 GitHub Actions CI 自动校验，防止乱码误入主分支

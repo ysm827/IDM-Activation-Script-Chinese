@@ -11,7 +11,8 @@ This is a Chinese-language fork that wraps the well-known IDM-Activation-Script 
 - Project type: Windows batch script toolkit; Chinese localization and maintenance fork
 - Primary language: Simplified Chinese user-facing text, English metadata for international search
 - License: GPL-3.0; this repository should remain public and open source
-- Current version: v1.4.0 (docs and runtime package in sync)
+- Current version: v1.4.1 (docs and runtime package in sync)
+- v1.4.1 packaging change: the release archive is now a fixed, version-less `IDM-Activation-Script.zip`, so download links never go stale; `release/` keeps only the latest build and older builds live in the Assets of each GitHub Release tag. Script logic is unchanged from v1.4.0.
 - v1.4.0 new feature (issue #20): users complained IDM nags about updates constantly. Menu `[4] 禁用 IDM 更新提示` / `[5] 恢复 IDM 更新提示` (CLI `/noupd` and `/reupd`) set `CheckUpdtVM` under `HKCU\Software\DownloadManager` to `0` / `1`, which turns IDM's automatic update check — and the update popup — off or back on. Side benefit: staying on the current IDM build avoids the activation breaking after an auto-upgrade. Menu numbering shifted: download IDM is now `[6]`, help is `[7]`.
 - v1.3.9 runtime fix (issue #16): `IAS.cmd` initialization previously used the legacy `Get-WmiObject` (DCOM/RPC), which can hang on some Windows 11 24H2/25H2 machines (WMI repository trouble or security-software hooks) — the symptom users saw as "stuck at 正在初始化". Now prefers `Get-CimInstance` and falls back to legacy WMI only on failure (keeps Windows 7 / PowerShell 2.0 compatibility), plus step-by-step init progress lines. Also added FAQ Q13 (issue #17: fake-serial popup on `[2]` → use `[1]` freeze) and Q14 (issue #18: 1panel/panel pages failing after activation is IDM browser-integration interference; the script changes no network/hosts/firewall).
 - Best first action for users: double-click `开始激活.cmd` as administrator — it self-checks the environment, then opens a menu. Recommend `[2]` activate (works immediately, no account/trial needed); if IDM still shows unregistered, use `[1]` freeze as fallback. (Since v1.3.6 the four old scripts are merged into this single entry file.)
@@ -26,7 +27,7 @@ This is a Chinese-language fork that wraps the well-known IDM-Activation-Script 
 - [ARCHITECTURE.md](ARCHITECTURE.md): How the script flows internally.
 - [SECURITY.md](SECURITY.md): Threat model, what the script touches, what it doesn't.
 - [CONTRIBUTING.md](CONTRIBUTING.md): How to submit fixes / translations.
-- Release ZIPs: [release/IDM-Activation-Script-v1.4.0.zip](release/IDM-Activation-Script-v1.4.0.zip) + [SHA256](release/IDM-Activation-Script-v1.4.0.zip.sha256).
+- Release ZIP: [release/IDM-Activation-Script.zip](release/IDM-Activation-Script.zip) + [SHA256](release/IDM-Activation-Script.zip.sha256). Since v1.4.1 the archive name carries no version number, so this path always resolves to the latest build; older builds stay downloadable from the Assets of each GitHub Release tag.
 
 ## What this script does
 
